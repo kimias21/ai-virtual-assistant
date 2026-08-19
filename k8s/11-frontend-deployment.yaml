@@ -17,8 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          # Replace with ghcr.io/<owner>/<repo>/frontend:<tag> built by the CI/CD workflow
-          image: ghcr.io/OWNER/REPO/frontend:latest
+          image: ghcr.io/kimias21/ai-virtual-assistant/frontend:latest
           ports:
             - containerPort: 8501
           envFrom:

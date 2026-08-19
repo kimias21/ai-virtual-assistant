@@ -29,7 +29,7 @@ course guidelines ("online link" via Hugging Face).
    ```bash
    pip install huggingface_hub
    huggingface-cli login
-   huggingface-cli upload <your-username>/ai-virtual-assistant . \
+   huggingface-cli upload kimias21/ai-virtual-assistant . \
      --repo-type=space
    ```
 

@@ -137,7 +137,8 @@ sharing the repo link with the teacher (see the Rules slide: *"Delivery to
 the teacher via a GitHub Repository"*).
 
 ```bash
-git remote add origin https://github.com/<your-username>/<repo-name>.git
-git branch -M main
+git remote add origin https://github.com/kimias21/ai-virtual-assistant.git
 git push -u origin main
 ```
+
+Repository: [github.com/kimias21/ai-virtual-assistant](https://github.com/kimias21/ai-virtual-assistant)
