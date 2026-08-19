@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: ai-virtual-assistant
+  labels:
+    app: ai-va-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-va-backend
+  template:
+    metadata:
+      labels:
+        app: ai-va-backend
+    spec:
+      containers:
+        - name: backend
+          # Replace with ghcr.io/<owner>/<repo>/backend:<tag> built by the CI/CD workflow
+          image: ghcr.io/OWNER/REPO/backend:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: ai-va-config
+            - secretRef:
+                name: ai-va-secret
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: ai-virtual-assistant
+spec:
+  selector:
+    app: ai-va-backend
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: ClusterIP

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: ai-virtual-assistant
+  labels:
+    app: ai-va-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-va-frontend
+  template:
+    metadata:
+      labels:
+        app: ai-va-frontend
+    spec:
+      containers:
+        - name: frontend
+          # Replace with ghcr.io/<owner>/<repo>/frontend:<tag> built by the CI/CD workflow
+          image: ghcr.io/OWNER/REPO/frontend:latest
+          ports:
+            - containerPort: 8501
+          envFrom:
+            - configMapRef:
+                name: ai-va-config
+          readinessProbe:
+            httpGet:
+              path: /_stcore/health
+              port: 8501
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: ai-virtual-assistant
+spec:
+  selector:
+    app: ai-va-frontend
+  ports:
+    - port: 8501
+      targetPort: 8501
+  type: ClusterIP
