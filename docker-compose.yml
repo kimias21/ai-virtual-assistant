@@ -4,6 +4,9 @@ services:
       context: ./backend
     image: ai-virtual-assistant-backend:local
     container_name: ai-va-backend
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     ports:
       - "8000:8000"
     environment:
