@@ -24,7 +24,7 @@ class LLMClientError(RuntimeError):
 
 
 def _build_client(settings: Settings) -> InferenceClient:
-    return InferenceClient(model=settings.hf_model_id, token=settings.hf_api_token or None,
+    return InferenceClient(model=settings.hf_model_id, provider="auto", token=settings.hf_api_token or None,
                             timeout=settings.hf_api_timeout)
 
 
