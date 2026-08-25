@@ -5,18 +5,17 @@ Project type: **Innovation-driven**
 
 An LLM-powered virtual assistant with a Streamlit frontend and a FastAPI
 backend that calls a hosted Hugging Face model. Ships with Docker,
-docker-compose, a GitHub Actions CI/CD pipeline, Kubernetes manifests, and a
-Hugging Face Space for a public demo link.
+docker-compose, a GitHub Actions CI/CD pipeline, and Kubernetes manifests.
+Live public demo: see "Online demo (live)" below.
 
 ## Architecture
 
-```
-┌─────────────┐        HTTP/JSON        ┌──────────────┐       HF Inference API      ┌──────────────┐
-│  Streamlit  │ ───────────────────────▶ │   FastAPI     │ ───────────────────────────▶ │ Hugging Face │
-│  frontend   │ ◀─────────────────────── │   backend     │ ◀─────────────────────────── │   (hosted    │
-│  (chat UI)  │      reply (JSON)        │  /api/v1/chat │        completion            │    LLM)      │
-└─────────────┘                          └──────────────┘                              └──────────────┘
-```
+┌─────────────┐ HTTP/JSON ┌──────────────┐ HF Inference API ┌──────────────┐
+│ Streamlit │ ───────────────────────▶ │ FastAPI │ ───────────────────────────▶ │ Hugging Face │
+│ frontend │ ◀─────────────────────── │ backend │ ◀─────────────────────────── │ (hosted │
+│ (chat UI) │ reply (JSON) │ /api/v1/chat │ completion │ LLM) │
+└─────────────┘ └──────────────┘ └──────────────┘
+
 
 - **Frontend** (`frontend/`): Streamlit chat UI. Sends the user message + conversation history to the backend.
 - **Backend** (`backend/`): FastAPI service. Validates requests, builds the chat prompt (system prompt + history), calls the Hugging Face Inference API, returns the reply.
@@ -30,7 +29,7 @@ Hugging Face Space for a public demo link.
 | Design (architecture & choices) | This README + `backend/app/` module layout (`config.py`, `schemas.py`, `llm_client.py`, `main.py`) |
 | Prototype development | `backend/`, `frontend/` — a working, runnable demo |
 | Continuous monitoring & testing | `tests/test_api.py` (backend correctness), `/health` endpoints, Docker `HEALTHCHECK`, k8s readiness/liveness probes |
-| (Local) deployment | `docker-compose.yml` (local Docker), `k8s/` (Kubernetes), `huggingface_space/` (public online link) |
+| Deployment | `docker-compose.yml` (local Docker), `k8s/` (Kubernetes); **public online link** live on Render + Streamlit Community Cloud — see "Online demo" below (`huggingface_space/` kept as an alternate path, requires HF PRO — see that section) |
 
 > This scaffold covers the engineering skeleton. Before submitting, fill in
 > the project-specific parts the guidelines call out: the concrete
@@ -40,38 +39,37 @@ Hugging Face Space for a public demo link.
 
 ## Repository layout
 
-```
 .
-├── backend/                 # FastAPI service
-│   ├── app/
-│   │   ├── main.py          # routes: /health, /api/v1/chat
-│   │   ├── config.py        # env-var driven settings
-│   │   ├── schemas.py       # request/response models
-│   │   └── llm_client.py    # Hugging Face Inference API wrapper
-│   ├── requirements.txt
-│   ├── requirements-dev.txt
-│   └── Dockerfile
-├── frontend/                 # Streamlit chat UI
-│   ├── app.py
-│   ├── requirements.txt
-│   └── Dockerfile
-├── huggingface_space/         # Single-container build for HF Spaces (public demo link)
-│   ├── Dockerfile
-│   ├── start.sh
-│   └── README.md              # Space config (YAML frontmatter) + deploy steps
-├── k8s/                        # Kubernetes manifests
-│   ├── 00-namespace.yaml
-│   ├── 01-configmap.yaml
-│   ├── 02-secret.yaml.example
-│   ├── 10-backend-deployment.yaml   # Deployment + Service
-│   ├── 11-frontend-deployment.yaml  # Deployment + Service
-│   └── 20-ingress.yaml
-├── tests/                      # pytest suite (mocks the HF call)
+├── backend/ # FastAPI service
+│ ├── app/
+│ │ ├── main.py # routes: /health, /api/v1/chat
+│ │ ├── config.py # env-var driven settings
+│ │ ├── schemas.py # request/response models
+│ │ └── llm_client.py # Hugging Face Inference API wrapper
+│ ├── requirements.txt
+│ ├── requirements-dev.txt
+│ └── Dockerfile
+├── frontend/ # Streamlit chat UI
+│ ├── app.py
+│ ├── requirements.txt
+│ └── Dockerfile
+├── huggingface_space/ # Single-container build for HF Spaces (public demo link)
+│ ├── Dockerfile
+│ ├── start.sh
+│ └── README.md # Space config (YAML frontmatter) + deploy steps
+├── k8s/ # Kubernetes manifests
+│ ├── 00-namespace.yaml
+│ ├── 01-configmap.yaml
+│ ├── 02-secret.yaml.example
+│ ├── 10-backend-deployment.yaml # Deployment + Service
+│ ├── 11-frontend-deployment.yaml # Deployment + Service
+│ └── 20-ingress.yaml
+├── tests/ # pytest suite (mocks the HF call)
 ├── .github/workflows/ci-cd.yml # lint, test, build+push images, sync HF Space
-├── docker-compose.yml          # local deployment
+├── docker-compose.yml # local deployment
 ├── .env.example
 └── pyproject.toml / pytest.ini # ruff + pytest config
-```
+
 
 ## Run it locally (Docker Compose — recommended)
 
@@ -125,10 +123,29 @@ Required GitHub repo secrets (Settings → Secrets and variables → Actions):
 - `HF_SPACE_REPO` — e.g. `your-username/ai-virtual-assistant`.
 - `GITHUB_TOKEN` is provided automatically for pushing to GHCR.
 
-## Online demo (Hugging Face Spaces)
+## Online demo (live)
 
-See `huggingface_space/README.md` for how to create the Space and get a
-public URL like `https://huggingface.co/spaces/<you>/ai-virtual-assistant`.
+**Frontend (chat UI):** https://ai-virtual-assistant-kimia21.streamlit.app
+**Backend (API):** https://ai-virtual-assistant-nyjn.onrender.com
+
+Hosted on **Streamlit Community Cloud** (frontend) + **Render** (backend),
+both free tiers — this is the actual public demo link to share/submit.
+
+> Both free tiers sleep after a period of inactivity (Render: ~15 min,
+> Streamlit: ~12 hours). The first request after a quiet period can take
+> 30–60 seconds while the instance wakes up; this is expected, not a bug.
+
+### Why not Hugging Face Spaces?
+
+The original plan (see `huggingface_space/`, still kept in this repo) was to
+host everything as a single Docker Space on Hugging Face. As of the current
+Hugging Face pricing, **Docker and Gradio Spaces require a paid PRO
+subscription** — only Static Spaces are free. That made the HF Space path a
+dead end on a free account, so the deploy moved to Render (backend) +
+Streamlit Community Cloud (frontend) instead, which are both genuinely free.
+The `huggingface_space/` files and the `deploy-hf-space` CI job are left in
+place as a working alternative if you (or a grader) ever upgrade to HF PRO —
+they are not what currently serves the live demo link above.
 
 ## Delivery
 
