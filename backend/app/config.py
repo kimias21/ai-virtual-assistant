@@ -13,7 +13,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # --- Hugging Face Inference ---
     # Any text-generation / conversational model hosted on the HF Hub, e.g.:
-    #   "HuggingFaceH4/zephyr-7b-beta", "mistralai/Mistral-7B-Instruct-v0.2",
+    #   "openai/gpt-oss-20b", "mistralai/Mistral-7B-Instruct-v0.2",
     #   "meta-llama/Llama-3.1-8B-Instruct" (gated, needs access) ...
     hf_model_id: str = "HuggingFaceH4/zephyr-7b-beta"
     hf_api_token: str = ""  # required to call the HF Inference API
