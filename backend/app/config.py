@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # Any text-generation / conversational model hosted on the HF Hub, e.g.:
     #   "openai/gpt-oss-20b", "mistralai/Mistral-7B-Instruct-v0.2",
     #   "meta-llama/Llama-3.1-8B-Instruct" (gated, needs access) ...
-    hf_model_id: str = "HuggingFaceH4/zephyr-7b-beta"
+    hf_model_id: str = "openai/gpt-oss-20b"
     hf_api_token: str = ""  # required to call the HF Inference API
     hf_api_timeout: int = 30
 
