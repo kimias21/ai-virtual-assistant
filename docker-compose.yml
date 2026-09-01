@@ -10,7 +10,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      HF_MODEL_ID: ${HF_MODEL_ID:-HuggingFaceH4/zephyr-7b-beta}
+      HF_MODEL_ID: ${HF_MODEL_ID:-openai/gpt-oss-20b}
       HF_API_TOKEN: ${HF_API_TOKEN}
       SYSTEM_PROMPT: ${SYSTEM_PROMPT:-You are a helpful, concise virtual assistant.}
       MAX_NEW_TOKENS: ${MAX_NEW_TOKENS:-512}
