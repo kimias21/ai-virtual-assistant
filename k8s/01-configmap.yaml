@@ -4,7 +4,7 @@ metadata:
   name: ai-va-config
   namespace: ai-virtual-assistant
 data:
-  HF_MODEL_ID: "HuggingFaceH4/zephyr-7b-beta"
+  HF_MODEL_ID: "openai/gpt-oss-20b"
   SYSTEM_PROMPT: "You are a helpful, concise virtual assistant. Answer clearly and admit when you are not sure."
   MAX_NEW_TOKENS: "512"
   TEMPERATURE: "0.7"
