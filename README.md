@@ -19,7 +19,7 @@ Live public demo: see "Online demo (live)" below.
 
 - **Frontend** (`frontend/`): Streamlit chat UI. Sends the user message + conversation history to the backend.
 - **Backend** (`backend/`): FastAPI service. Validates requests, builds the chat prompt (system prompt + history), calls the Hugging Face Inference API, returns the reply.
-- **Model**: an existing pretrained conversational LLM hosted on the Hugging Face Hub (default: `HuggingFaceH4/zephyr-7b-beta`, configurable via `HF_MODEL_ID`). No local training/fine-tuning — the project uses an off-the-shelf model, per the "existing models" innovation-driven path.
+- **Model**: an existing pretrained conversational LLM hosted on the Hugging Face Hub (`default: openai/gpt-oss-20b, served via the Groq provider, configurable via HF_MODEL_ID`, configurable via `HF_MODEL_ID`). No local training/fine-tuning — the project uses an off-the-shelf model, per the "existing models" innovation-driven path.
 
 ## Mapping to the course's Innovation-driven steps
 
